@@ -16,8 +16,9 @@ insert_product = 'INSERT INTO shoplist (product, quantity) VALUES (?, ?)'
 # Read
 select_product = 'SELECT * FROM shoplist'
 
-count_products = 'SELECT SUM(quantity) FROM shoplist'
+count_products = 'SELECT SUM(quantity) FROM shoplist WHERE completed>0'
 
+#Считаем только купленные товары, а не всю корзину. 
 get_quantity = 'SELECT quantity FROM shoplist WHERE id = ?'
 
 select_products_completed = """

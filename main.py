@@ -8,7 +8,7 @@ def main(page : ft.Page):
     product_list = ft.Column()
     
     product_number = 0
-    product_total = ft.TextField(read_only = False, value = f"Всего куплено {product_number} продуктов")
+    product_total = ft.Text(value = f"Всего куплено {product_number} продуктов")
     
     def load_products():
         product_list.controls.clear() #очистить перед добавлением
@@ -59,8 +59,11 @@ def main(page : ft.Page):
         
         def change_quantity():
             if quantity_field.value.isdigit():
-                print("Ful")
                 quantity = int(quantity_field.value)
+                #Я решил ограничить количество товара
+                if quantity>1000:
+                    quantity_field.value = main_db.get_quantity(product_id = product_id)
+                    return
                 main_db.update_product(product_id = product_id, new_product = None, completed = None, quantity = quantity)
                 print(f"Количество продукта изменено - {quantity_field.value}")
                 load_products()
@@ -69,6 +72,9 @@ def main(page : ft.Page):
                 
         def increment_quantity():
             quantity = main_db.get_quantity(product_id = product_id)+1
+            if quantity>1000:
+                    quantity_field.value = main_db.get_quantity(product_id = product_id)
+                    pass
             main_db.update_product(product_id = product_id, new_product = None, completed = None, quantity = quantity)   
             load_products()
             
@@ -85,7 +91,7 @@ def main(page : ft.Page):
                 load_products()
                 
                 
-        quantity_field = ft.TextField(value = quantity, on_submit=change_quantity)
+        quantity_field = ft.TextField(value = quantity, on_submit=change_quantity, width = 70)
         increment_button = ft.IconButton(icon = ft.Icons.ADD, on_click = increment_quantity)
         decrement_button = ft.IconButton(icon = ft.Icons.REMOVE, on_click = decrement_quantity)
         
